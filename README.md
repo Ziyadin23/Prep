@@ -9,3 +9,4 @@ experiment in autonomous Codex development.
 - Current work: [`docs/exec-plans/active/`](docs/exec-plans/active/)
 - Completed work: [`docs/exec-plans/completed/`](docs/exec-plans/completed/)
 - Durable decisions: [`docs/decisions/`](docs/decisions/)
+- Authentication configuration: [`docs/authentication-setup.md`](docs/authentication-setup.md)

@@ -24,8 +24,9 @@ Browser
 
 - Next.js 16 App Router, React 19, and strict TypeScript form the application
   runtime. Tailwind CSS 4 is loaded through PostCSS.
-- The application currently contains the generated root layout and landing page;
-  authentication and messenger UI have not been integrated yet.
+- Authentication uses request-scoped Supabase SSR clients with cookie-backed
+  sessions. Next.js Proxy refreshes tokens; protected server-rendered pages
+  validate signed JWT claims before rendering.
 - Supabase CLI configuration lives under `supabase/`. Public sign-up and
   anonymous sign-in are disabled in the local configuration.
 - The applied database design is represented by timestamped migrations. pgTAP
@@ -48,9 +49,9 @@ messages only as themselves. The application grants no message update or delete
 capability. Anonymous database access is denied. `messages` participates in the
 Supabase Realtime publication.
 
-The service-role key is a server secret and must never appear in browser code,
+Supabase secret and legacy service-role keys must never appear in browser code,
 public environment variables, logs, or Vercel client configuration. Current MVP
-flows should not require it in the application.
+flows do not require either key in the application.
 
 ## Application boundaries
 
