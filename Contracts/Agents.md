@@ -48,6 +48,14 @@ Update `Contracts/Progress.md` at these points:
 
 Do not mark a contract `done` until the acceptance checks in `Contracts/Plan.md` pass or the reason for not running them is documented.
 
+### Shared Progress Rules
+
+- The agent assigned to a contract owns its progress updates; the Integration/QA agent keeps the overall ledger consistent after merges.
+- Before changing implementation files, record the contract as `in_progress` and name the working branch in the handoff notes.
+- Before opening a pull request, add the files changed, checks run, current result, and exact next step to the handoff notes.
+- When multiple agents are active, append a new dated handoff entry; never replace or delete another agent's entry.
+- Keep progress updates in the same pull request as the work they describe. Documentation-only work must also record its result.
+
 ## Token Budget Rules
 
 - Prefer targeted reads over broad reads.
@@ -80,6 +88,14 @@ If a change crosses these areas, record the reason in `Contracts/Progress.md` be
 - Commit an `.env.example` with variable names only.
 - Keep the main branch deployable.
 - Run relevant checks before requesting review.
+
+## Pull Request Review Rules
+
+- Every pull request requires review by at least one teammate or agent other than its author before it is merged.
+- The author must include a concise summary, changed files, checks run, required Supabase/Vercel setup, and the related contract ID.
+- The reviewer must verify MVP scope, no committed secrets, relevant tests/checks, and that `Contracts/Progress.md` has an accurate handoff entry.
+- Changes to database migrations, Row Level Security, authentication, environment variables, or deployment settings require review from the Backend or Integration/QA owner.
+- Merge only when the branch is up to date with `main`, required checks pass, and the reviewer has approved it.
 
 ## MVP Boundaries
 

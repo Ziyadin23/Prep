@@ -39,6 +39,13 @@ Allowed statuses: `todo`, `in_progress`, `blocked`, `done`.
 
 Next step: start C00 - Project Scaffold.
 
+### 2026-08-28 - Documentation Workflow Update
+
+- Branch: `docs/review-workflow`.
+- Added mandatory shared-progress and pull-request review rules to `Contracts/Agents.md`.
+- No MVP application code changed.
+- Validation: `git diff --check`.
+
 ## Interruption Template
 
 Use this template before token/context loss or when stopping mid-contract:
