@@ -39,7 +39,7 @@ Use Next.js, TypeScript, and Tailwind CSS for the app; Supabase for authenticati
 
 ## Implementation Contracts
 
-### [ ] C00 - Project Scaffold
+### [x] C00 - Project Scaffold
 
 Goal: Create the initial Next.js, TypeScript, and Tailwind CSS application structure.
 
