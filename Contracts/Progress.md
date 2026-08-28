@@ -6,17 +6,17 @@ Last updated: 2026-08-28
 
 ## Current State
 
-- Active contract: C01 - Supabase Schema And Policies
-- Next recommended contract: C01 - Supabase Schema And Policies
+- Active contract: none
+- Next recommended contract: C02 - Authentication Flow
 - Last known branch: feature/supabase-schema
-- Last known repository state: C00 completed and verified; C01 schema and policy work is in progress.
+- Last known repository state: C00 and C01 are completed and verified; no authentication flow has been implemented.
 
 ## Contract Status
 
 | Contract | Status | Owner | Notes |
 | --- | --- | --- | --- |
 | C00 - Project Scaffold | done | Frontend | Next.js, TypeScript, Tailwind CSS, ESLint, and `.env.example` verified locally. |
-| C01 - Supabase Schema And Policies | in_progress | Backend | Add profiles/messages schema, RLS, and realtime setup. |
+| C01 - Supabase Schema And Policies | done | Backend | Profiles/messages schema, RLS policies, Realtime publication, and pgTAP coverage verified locally. |
 | C02 - Authentication Flow | todo | Frontend/Backend | Magic-link sign-in for invited users only. |
 | C03 - Profile Setup | todo | Frontend/Backend | Display name setup before chat access. |
 | C04 - Realtime Team Chat | todo | Frontend/Backend | Recent history, realtime inserts, de-duplication, composer. |
@@ -27,6 +27,35 @@ Last updated: 2026-08-28
 Allowed statuses: `todo`, `in_progress`, `blocked`, `done`.
 
 ## Handoff Notes
+
+### 2026-08-28 - C01 Completed
+
+Status: done
+Changed files:
+- `supabase/config.toml`
+- `supabase/migrations/20260828120156_create_messenger_schema.sql`
+- `supabase/tests/profiles_messages_rls.test.sql`
+- `Contracts/Plan.md`, `Contracts/Progress.md`, and `Contracts/RepoMap.md`
+
+Commands run:
+- `supabase start` -> local stack started and applied the migration.
+- `supabase db reset` -> completed successfully.
+- `supabase db lint` -> no schema errors found.
+- `supabase test db` -> 15 pgTAP tests passed.
+- Database inspection -> RLS is enabled for `profiles` and `messages`; `messages` is in the `supabase_realtime` publication.
+- `npm run lint` -> passed.
+
+Completed:
+- Verified anonymous users cannot read profiles or messages.
+- Verified users can create and update only their own profile.
+- Verified authenticated teammates can read shared group messages.
+- Verified a user cannot send a message using another user's ID, or edit/delete messages.
+
+Next exact step:
+- Begin C02 - Authentication Flow on a dedicated branch.
+
+Blockers:
+- None.
 
 ### 2026-08-28 - C01 Started
 
