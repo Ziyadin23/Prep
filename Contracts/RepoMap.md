@@ -7,6 +7,7 @@ This file is a lightweight navigation map. Keep it short and update it when impo
 - `app/`: Next.js App Router routes and the initial application shell.
 - `Contracts/`: project plan, agent contract, progress ledger, and repo map.
 - `public/`: static assets used by the Next.js application.
+- `supabase/`: Supabase CLI configuration and database migrations.
 - `package.json`, `package-lock.json`: Node.js scripts and locked application dependencies.
 - `.env.example`: names of the public Supabase client variables; values are intentionally omitted.
 - `README.md`: short repository title.
@@ -19,7 +20,6 @@ These areas do not exist yet, but are expected as contracts are implemented:
 - `app/`: Next.js app routes and screens.
 - `components/`: reusable UI components.
 - `lib/`: Supabase client and shared helpers.
-- `supabase/`: local Supabase config and migrations, if used.
 - `docs/`: deployment or setup documentation, if it grows beyond README-level notes.
 
 ## Reading Guidance

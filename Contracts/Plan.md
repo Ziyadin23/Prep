@@ -61,7 +61,7 @@ Acceptance checks:
 - Development server starts.
 - Type check or build passes if available.
 
-### [ ] C01 - Supabase Schema And Policies
+### [~] C01 - Supabase Schema And Policies
 
 Goal: Define database tables and security policies for profiles and messages.
 
