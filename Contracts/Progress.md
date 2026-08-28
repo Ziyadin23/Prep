@@ -69,6 +69,24 @@ Next exact step:
 Blockers:
 - Docker and a linked Supabase project are not available in this workspace, so the migration and RLS policies cannot yet be executed end to end.
 
+### 2026-08-28 - C01 Policy Tests Added
+
+Status: in_progress
+Changed files:
+- `supabase/tests/profiles_messages_rls.test.sql`
+
+Completed:
+- Added pgTAP coverage for anonymous read denial, own-profile creation and update, shared authenticated reads, impersonated message denial, and blocked message editing/deletion.
+
+Commands run:
+- `npx supabase test db` -> could not connect to the local database because the Supabase stack is not running.
+
+Next exact step:
+- Install and start Docker or Podman, run `supabase start`, then run `supabase db reset`, `supabase db lint`, and `supabase test db`.
+
+Blockers:
+- Docker and Podman are unavailable; `sudo` requires interactive user authentication to install a container runtime.
+
 ### 2026-08-28 - C00 Completed
 
 Status: done
