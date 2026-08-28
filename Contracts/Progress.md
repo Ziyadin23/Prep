@@ -6,17 +6,17 @@ Last updated: 2026-08-28
 
 ## Current State
 
-- Active contract: none
+- Active contract: C01 - Supabase Schema And Policies
 - Next recommended contract: C01 - Supabase Schema And Policies
-- Last known branch: codex/docs-ai-agent-contracts
-- Last known repository state: C00 completed and verified; no Supabase integration has been implemented.
+- Last known branch: feature/supabase-schema
+- Last known repository state: C00 completed and verified; C01 schema and policy work is in progress.
 
 ## Contract Status
 
 | Contract | Status | Owner | Notes |
 | --- | --- | --- | --- |
 | C00 - Project Scaffold | done | Frontend | Next.js, TypeScript, Tailwind CSS, ESLint, and `.env.example` verified locally. |
-| C01 - Supabase Schema And Policies | todo | Backend | Add profiles/messages schema, RLS, and realtime setup. |
+| C01 - Supabase Schema And Policies | in_progress | Backend | Add profiles/messages schema, RLS, and realtime setup. |
 | C02 - Authentication Flow | todo | Frontend/Backend | Magic-link sign-in for invited users only. |
 | C03 - Profile Setup | todo | Frontend/Backend | Display name setup before chat access. |
 | C04 - Realtime Team Chat | todo | Frontend/Backend | Recent history, realtime inserts, de-duplication, composer. |
@@ -27,6 +27,47 @@ Last updated: 2026-08-28
 Allowed statuses: `todo`, `in_progress`, `blocked`, `done`.
 
 ## Handoff Notes
+
+### 2026-08-28 - C01 Started
+
+Status: in_progress
+Branch: `feature/supabase-schema`
+
+Completed:
+- Confirmed C01 is the next unfinished contract.
+- Reviewed the current Supabase migration, Row Level Security, and Realtime publication guidance.
+
+Next exact step:
+- Add the first schema migration for profiles, messages, RLS policies, and the Realtime publication.
+
+Blockers:
+- Local Supabase/Docker tooling is not installed, so database execution tests may require a Supabase project or local Docker setup.
+
+### 2026-08-28 - C01 Schema Milestone
+
+Status: in_progress
+Changed files:
+- `supabase/config.toml`
+- `supabase/migrations/20260828120156_create_messenger_schema.sql`
+- `Contracts/Plan.md`, `Contracts/Progress.md`, and `Contracts/RepoMap.md`
+
+Completed:
+- Initialized the Supabase CLI project structure.
+- Added `profiles` and `messages` tables, validation constraints, a message-order index, least-privilege grants, and Row Level Security policies.
+- Added `messages` to the `supabase_realtime` publication.
+- Disabled public sign-up in the local Supabase Auth configuration.
+
+Commands run:
+- `npm ci` -> dependencies installed successfully.
+- `npm run lint` -> passed.
+- `npx supabase db lint` -> not run against a database; no Postgres service is listening on the local Supabase port.
+- `npx supabase start` -> blocked because Docker and Podman are not installed.
+
+Next exact step:
+- Start the local Supabase stack with Docker and run `supabase db reset` plus `supabase db lint`, then verify anonymous reads and impersonated inserts are rejected.
+
+Blockers:
+- Docker and a linked Supabase project are not available in this workspace, so the migration and RLS policies cannot yet be executed end to end.
 
 ### 2026-08-28 - C00 Completed
 
