@@ -27,6 +27,10 @@ Browser
 - Authentication uses request-scoped Supabase SSR clients with cookie-backed
   sessions. Next.js Proxy refreshes tokens; protected server-rendered pages
   validate signed JWT claims before rendering.
+- The protected root resolves the current profile and latest 100 messages on the
+  server. A narrow client chat subtree owns Realtime state and reconnect feedback;
+  message sends use an authenticated Server Action that derives the sender from
+  verified claims.
 - Supabase CLI configuration lives under `supabase/`. Public sign-up and
   anonymous sign-in are disabled in the local configuration.
 - The applied database design is represented by timestamped migrations. pgTAP
@@ -64,7 +68,9 @@ flows do not require either key in the application.
 - Database constraints and RLS remain the final enforcement layer even when the
   UI validates the same input for usability.
 - Realtime events are an additional delivery path for persisted messages; the UI
-  must reconcile query, insert-response, and subscription results by message ID.
+  reconciles query, insert-response, post-subscription catch-up, and subscription
+  results by message ID. The catch-up query closes the window between the initial
+  server read and successful channel subscription.
 
 ## Engineering constraints
 
