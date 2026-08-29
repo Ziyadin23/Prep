@@ -1,6 +1,7 @@
 # C03 - Profile Setup
 
-- Status: `ready`
+- Status: `completed`
+- Completed: 2026-08-29
 - Depends on: C00, C01, and C02 (completed)
 - Product source: `docs/product/SPEC.md`, section "C03 - Profile Setup"
 - Created: 2026-08-29
@@ -77,6 +78,43 @@ Exercise the full flow against local Supabase with separate cookie jars for a
 profile-less user and a profiled user. Record observed routing, validation,
 profile persistence, ownership denial, and regression checks for sign-out.
 
+Final automated verification on 2026-08-29:
+
+```text
+npm test                         -> 6 files and 36 tests passed
+npx tsc --noEmit                 -> passed
+npm run lint                     -> passed
+npm run build -- --webpack       -> passed
+npx --yes supabase@2.116.0 db lint -> no schema errors
+npx --yes supabase@2.116.0 test db -> 15 pgTAP tests passed
+git diff --check                 -> passed
+```
+
+Focused tests cover trimming and Unicode-aware limits, invalid input, expired
+claims, provider failure, derivation of ownership from verified claims, a
+forged form ID being ignored, profile-less gating, existing-profile pass-through,
+and fail-closed lookup errors. The production build compiled, type-checked, and
+generated the application routes successfully.
+
+Local end-to-end acceptance used Supabase CLI 2.116.0, two disposable users,
+isolated cookie jars, Mailpit-delivered magic links, and the progressive-
+enhancement Server Action form:
+
+- the profile-less user was held at display-name setup while a separately
+  profiled user reached the chat placeholder directly;
+- a one-character name returned the actionable two-character validation error;
+- a trimmed valid name persisted and immediately opened the chat gate with a
+  success state;
+- the same user corrected their own display name successfully;
+- an extra forged `id` field naming the other user was ignored, and direct
+  database inspection confirmed that the other profile remained unchanged;
+- sign-out returned to login and subsequent protected-root access stayed signed
+  out; and
+- the existing pgTAP suite independently reconfirmed owner-only profile writes.
+
+The two disposable users and cookie jars were deleted after acceptance. No test
+credentials or Supabase secret/service-role values were written to the repository.
+
 ## Implementation discoveries
 
 - C01 already provides `profiles(id, display_name, created_at)`, a foreign key
@@ -89,6 +127,20 @@ profile persistence, ownership denial, and regression checks for sign-out.
 - No generated TypeScript database types exist yet. Decide whether C03 benefits
   from adding them after inspecting the current Supabase CLI workflow; do not
   hand-maintain types that can drift from migrations.
+- Work is proceeding on `feature/c03-profile-setup`. The installed Next.js 16
+  guidance requires each Server Action to authenticate and authorize again,
+  even when its form is behind a server-rendered gate. The action will therefore
+  derive the profile ID only from verified claims and accept only a display name.
+- The current project does not enable Cache Components. Its request-scoped
+  Supabase client reads `cookies()`, so the root profile lookup remains a fresh,
+  per-request read without introducing a shared profile cache.
+- C03 did not add hand-maintained database types. Its narrow profile projection
+  is inferred by the Supabase client, while generated schema types can be added
+  later when the repository establishes a repeatable generation workflow.
+- A single root rendering gate is sufficient for this contract: failed lookups
+  fail closed, missing profiles render setup, and valid profiles render the chat
+  placeholder. The same action safely handles initial insert and later correction
+  through an own-ID upsert protected by application claims and RLS.
 
 ## Blockers
 
@@ -96,8 +148,7 @@ None known.
 
 ## Handoff / remaining work
 
-Start by setting this plan to `in_progress`, confirming a clean focused branch,
-and reading the installed Next.js guidance relevant to forms, Server Actions,
-and request-time rendering. Inspect the current C02 auth boundary and C01 policy
-tests before deciding the smallest complete profile flow. Keep progress,
-discoveries, verification evidence, and any blocker in this plan.
+C03 is complete. C04 can replace the gated placeholder with persisted realtime
+team chat. Preserve the per-request auth/profile checks, derive sender identity
+from verified claims, keep RLS authoritative, and reconcile query, insert, and
+Realtime delivery by message ID.
