@@ -1,6 +1,7 @@
 # C06 - Deployment Documentation
 
-- Status: `ready`
+- Status: `completed`
+- Completed: 2026-08-29
 - Depends on: C00 through C05 (completed)
 - Product source: `docs/product/SPEC.md`, section "C06 - Deployment Documentation"
 - Created: 2026-08-29
@@ -67,6 +68,28 @@ Also audit tracked files for credential patterns, validate every documented path
 and variable name against the repository, and record the official sources used
 for temporally sensitive setup instructions.
 
+Final verification on 2026-08-29:
+
+```text
+npm test                           -> 9 files and 54 tests passed
+npx tsc --noEmit                   -> passed (sequential rerun after build)
+npm run lint                       -> passed
+npm run build -- --webpack         -> passed
+git diff --check                   -> passed
+tracked credential-pattern audit  -> no credential values found
+documented path/variable audit     -> passed
+official reference link check     -> 9 of 9 returned HTTP 200
+```
+
+The first TypeScript command ran concurrently with `next build` and observed
+`.next/types` while Next regenerated it. A sequential rerun after the successful
+build passed; this was a verification-command race, not an application failure.
+
+The source audit used the installed Next.js 16 environment-variable guide plus
+current official Vercel environment-variable/Next.js deployment and Supabase
+redirect, passwordless email, email template, user invitation, API key, and SMTP
+documentation. The resulting guide links those primary sources directly.
+
 ## Implementation discoveries
 
 - `docs/authentication-setup.md`, `.env.example`, and the README already contain
@@ -74,6 +97,15 @@ for temporally sensitive setup instructions.
   duplicated.
 - C02 intentionally uses a public publishable/anon key in browser configuration
   and keeps user provisioning outside the application.
+- Supabase's hosted default email service is not suitable for general production
+  delivery and normally sends only to authorized project-team addresses. The
+  guide therefore requires production SMTP before inviting real teammates.
+- Current Supabase guidance distinguishes browser-safe publishable keys from
+  secret and legacy service-role keys that bypass RLS. Prep needs only the former.
+- A Terra sub-agent produced the bounded documentation draft at the user's
+  request. The lead agent reconciled missing local-user and migration steps,
+  checked every primary-source link, and independently ran the credential audit
+  and full application baseline.
 
 ## Blockers
 
@@ -81,6 +113,6 @@ None known.
 
 ## Handoff / remaining work
 
-Set this plan to `in_progress` on a focused C06 branch, audit the existing docs
-and configuration against current official guidance, then write and verify the
-smallest complete local-to-production setup path.
+C06 is complete. C07 should execute and record the final three-user integration,
+security, responsive, and release-readiness matrix without placing identities,
+tokens, or other private operational data in the repository.

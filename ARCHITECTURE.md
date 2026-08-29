@@ -35,8 +35,10 @@ Browser
   anonymous sign-in are disabled in the local configuration.
 - The applied database design is represented by timestamped migrations. pgTAP
   tests exercise access rules; migrations are the schema source of truth.
-- Deployment targets Vercel, but production setup is intentionally deferred to
-  its roadmap contract.
+- Deployment targets Vercel. Reproducible public environment, Supabase Auth,
+  redirect, email, and three-user provisioning steps live in
+  `docs/authentication-setup.md`; production credentials and teammate identities
+  remain outside the repository.
 
 ## Data and authorization boundaries
 
