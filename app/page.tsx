@@ -176,43 +176,55 @@ export default async function Home({ searchParams }: HomePageProps) {
     .filter((message): message is ChatMessage => Boolean(message));
 
   return (
-    <main className="flex min-h-dvh flex-1 justify-center px-4 py-8 sm:px-6 sm:py-12">
-      <section className="w-full max-w-4xl rounded-3xl border border-stone-200 bg-white p-5 shadow-sm sm:p-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-teal-800">
-          Prep
-        </p>
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight text-stone-950">
-          Welcome, {profile.display_name}
-        </h1>
+    <main className="flex min-h-dvh flex-1 justify-center py-0 sm:px-6 sm:py-10">
+      <section className="w-full max-w-4xl bg-white sm:rounded-3xl sm:border sm:border-stone-200 sm:shadow-sm">
+        <header className="flex flex-col gap-4 border-b border-stone-200 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-teal-800">
+              Prep
+            </p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl">
+              Your team space
+            </h1>
+          </div>
+          <details className="w-full rounded-xl border border-stone-200 bg-stone-50 sm:w-auto sm:min-w-64">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-left text-sm font-semibold text-stone-800 marker:content-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-800">
+              <span className="min-w-0 truncate">{profile.display_name}</span>
+              <span className="shrink-0 text-stone-500">
+                Account
+              </span>
+            </summary>
+            <div className="border-t border-stone-200 px-4 py-4">
+              <p className="break-all text-sm text-stone-600">Signed in as {email}</p>
+              <ProfileForm
+                initialDisplayName={profile.display_name}
+                submitLabel="Save display name"
+              />
+              <form action={signOut} className="mt-4">
+                <button
+                  type="submit"
+                  className="flex min-h-11 w-full items-center justify-center rounded-xl border border-stone-300 px-4 py-2.5 text-sm font-semibold text-stone-800 transition hover:border-stone-400 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-800"
+                >
+                  Sign out
+                </button>
+              </form>
+            </div>
+          </details>
+        </header>
+        <div className="px-5 pb-6 pt-5 sm:px-8 sm:pb-8">
         {profileSaved ? (
           <p
             aria-live="polite"
-            className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+            className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
           >
             Your display name has been saved.
           </p>
         ) : null}
-        <p className="mt-3 text-base leading-7 text-stone-600">
-          You&apos;re chatting as {profile.display_name} in your private team space.
+        <p className={`${profileSaved ? "mt-4" : ""} text-base leading-7 text-stone-600`}>
+          You&apos;re chatting as <span className="font-medium text-stone-800">{profile.display_name}</span> in your private team space.
         </p>
         <Chat currentUserId={userId} initialMessages={initialMessages} />
-        <details className="mt-8 rounded-2xl border border-stone-200 p-5">
-          <summary className="cursor-pointer text-sm font-semibold text-stone-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-800">
-            Change display name
-          </summary>
-          <ProfileForm
-            initialDisplayName={profile.display_name}
-            submitLabel="Save display name"
-          />
-        </details>
-        <form action={signOut} className="mt-6">
-          <button
-            type="submit"
-            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-stone-300 px-5 py-2.5 text-sm font-semibold text-stone-800 transition hover:border-stone-400 hover:bg-stone-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-800"
-          >
-            Sign out
-          </button>
-        </form>
+        </div>
       </section>
     </main>
   );

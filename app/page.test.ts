@@ -83,7 +83,8 @@ describe("the root profile gate", () => {
 
     const page = await Home({ searchParams: Promise.resolve({}) });
 
-    expect(textContent(page)).toMatch(/Welcome, Ada/);
+    expect(textContent(page)).toMatch(/Your team space/);
+    expect(textContent(page)).toMatch(/Signed in as owner@example.com/);
     expect(textContent(page)).toMatch(/private team space/);
     expect(textContent(page)).not.toMatch(/Choose your display name/);
     expect(mocks.order).toHaveBeenNthCalledWith(1, "created_at", {

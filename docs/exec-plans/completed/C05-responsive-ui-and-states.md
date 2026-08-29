@@ -1,6 +1,7 @@
 # C05 - Responsive UI and States
 
-- Status: `ready`
+- Status: `completed`
+- Completed: 2026-08-29
 - Depends on: C00 through C04 (completed)
 - Product source: `docs/product/SPEC.md`, section "C05 - Responsive UI and States"
 - Created: 2026-08-29
@@ -78,6 +79,42 @@ laptop viewport. Record screenshots or equivalent concrete observations for the
 main flow, long-content wrapping, reduced-height composer behavior, keyboard
 focus, and each asynchronous/error state that cannot be proven automatically.
 
+Final automated verification on 2026-08-29:
+
+```text
+npm test                           -> 9 files and 54 tests passed
+npx tsc --noEmit                   -> passed
+npm run lint                       -> passed
+npm run build -- --webpack         -> passed
+npx --yes supabase@2.116.0 db lint -> no schema errors
+npx --yes supabase@2.116.0 test db  -> 15 pgTAP tests passed
+git diff --check                   -> passed
+```
+
+Browser acceptance used Chromium with disposable local Supabase users at
+390 x 844 phone, 390 x 640 reduced-height phone, and 1440 x 900 laptop
+viewports:
+
+- the signed-out magic-link form, first-time display-name gate, profiled chat,
+  account menu, and sign-out control rendered without horizontal clipping;
+- a maximum-length 2,000-character unbroken message wrapped within its message
+  bubble without covering controls or widening the page;
+- full-page reduced-height capture confirmed that the internally scrollable
+  history leaves the composer, count, and send control reachable through normal
+  page scrolling;
+- consecutive messages from one sender appeared as a named group while each
+  message retained its own timestamp;
+- labels, visible focus styles, live regions, minimum-height touch controls, and
+  the Realtime refresh action remained present at phone and laptop layouts; and
+- the root loading UI, non-enumerating authentication success and validation
+  states, profile/history network boundaries, empty history, Realtime connection
+  failure, profile/message pending and validation feedback, and send failure are
+  represented by explicit UI branches and focused automated coverage.
+
+The browser-only Playwright CLI was used ephemerally and was not added as a
+project dependency. Disposable users, messages, session state, and test
+credentials were removed after acceptance.
+
 ## Implementation discoveries
 
 - C02-C04 already provide accessible form labels, live regions, pending/error
@@ -89,6 +126,14 @@ focus, and each asynchronous/error state that cannot be proven automatically.
 - No browser automation dependency is currently installed. Prefer the smallest
   verification approach that produces honest phone/laptop evidence without
   adding a durable dependency solely for one manual audit.
+- The final shell uses a full-width phone layout and a bordered laptop card. The
+  signed-in account menu keeps profile correction and sign-out in the header,
+  while the chat groups consecutive messages and makes a disconnected Realtime
+  state actionable with a touch-sized refresh button.
+- A Terra sub-agent implemented the bounded responsive UI refinement at the
+  user's request. The lead agent reviewed the diff, adjusted the account label's
+  accessible name, and independently ran browser, application, and database
+  verification before completion.
 
 ## Blockers
 
@@ -96,6 +141,6 @@ None known.
 
 ## Handoff / remaining work
 
-After C04 is committed, create a focused C05 branch, set this plan to
-`in_progress`, inspect all auth/profile/chat surfaces together, and choose the
-smallest coherent layout refinement before viewport and state verification.
+C05 is complete. C06 should document reproducible local and production setup,
+including public Vercel variables, Supabase redirect URLs, three manual user
+invitations, and the prohibition on exposing the service-role key.
